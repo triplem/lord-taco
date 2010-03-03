@@ -22,7 +22,8 @@ my $dblog_module = $bot->load('DBLog');
 my $dbseen_module = $bot->load('DBSeen'); 
 my $meeting_module = $bot->load('Meeting');
 my $infobot_module = $bot->load('Infobot');
-
+my $insult_module = $bot->load('ASInsult');
+my $title_module = $bot->load('Title');
 
 #$bot->load('Loader'); # could be used for ease of configuration
 $bot->run();
