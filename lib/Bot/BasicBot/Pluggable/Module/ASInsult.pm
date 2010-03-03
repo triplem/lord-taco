@@ -15,25 +15,20 @@ sub said {
     return unless $body =~ /^\s*insult (.*)\s*$/;
 
     my $person   = $1;
-    my $language = "english";
-
-    if ($person =~ s/ in ([a-z]+)\s*\w*\s*//i) {
-        $language = lc($1);
-    }
     
     $person = $who if $person =~ /^\s*me\s*$/i;
 
-    my $insultgenerator = Acme::Scurvy::Whoreson::BilgeRat->new( language => 'pirates' );
+    my $insultgenerator = Acme::Scurvy::Whoreson::BilgeRat->new( language => 'insultserver' ); # try: pirate, lala, insultserver
 
     my $insult = "$insultgenerator";    
 
 
     return "Errk, the insult code is mysteriously not working" unless defined $insult;
 
-    $insult =~ s/^\s*You are/$person is/i if ($person ne $who);  
+#    $insult =~ s/^\s*You are/$person is/i if ($person ne $who);  
+    $insult = $person.": ".$insult;
 
-
-    return $insult if $language eq 'english';
+    return $insult;
 }
 
 sub help {
