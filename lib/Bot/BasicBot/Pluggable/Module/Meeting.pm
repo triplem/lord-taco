@@ -27,7 +27,7 @@ sub init {
 }
 
 sub help {
-  return "Commands: !voteon, !voteoff ";
+  return "Commands: startmeeting, endmeeting, startvote, endvote, topic";
 };
 
 sub admin {
@@ -61,16 +61,12 @@ sub admin {
     }
   }
 
-  $self->tell($channel, $meetingOperator);
-
   return 0 unless $self->get($meetingFlag) eq 'true';
-  return 0 unless $message->{who} eq $meetingOperator;
+  return 0 unless $message->{who} eq $self->get($meetingOperator);
   
   my $voteFlag = "meeting_vote_".$channel;
   my $voteValue = "meeting_vote_value_".$channel;
-  
-  $self->tell($channel, $command);
-  
+
   if ( $command eq "startvote") {
     $self->set($voteFlag, 'true');
     $self->set($voteValue, 0);
@@ -105,7 +101,7 @@ sub seen {
   
   return 0 unless $self->get($meetingFlag) eq 'true';
 
-  if ($self->get("vote_".$channel) eq 'true') {
+  if ($self->get("meeting_vote_".$channel) eq 'true') {
     if ( $body eq '+1' ) {
       my $counter = $self->get($voteValue);       
       $counter++;
