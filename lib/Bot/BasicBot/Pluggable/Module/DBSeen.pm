@@ -3,13 +3,16 @@ package Bot::BasicBot::Pluggable::Module::DBSeen;
 use strict;
 use Bot::BasicBot::Pluggable::Module;
 use base qw(Bot::BasicBot::Pluggable::Module);
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 use Log::Log4perl qw(:easy);
-use DBI;
-use utf8;
-use Carp;
+
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh();
+
+Log::Log4perl->easy_init($DEBUG);
+my $logger = get_logger();
 
 sub help() {
-  return "<seen>";
+  return "Commands: 'seen <nick>'";
 };
 
 sub told {
@@ -28,19 +31,18 @@ sub told {
     }
 
     # Find the user in the dbms
-    my $sqlQuery = sprintf "SELECT  TO_CHAR(tz_gmt, 'DDth Mon YYYY') AS tz_date, TO_CHAR(tz_gmt, 'HH24:MI:SS tz') AS tz_time
-                              FROM	irclog_search
-                             WHERE  channel = '%s'
-                               AND	(nick = '%s' OR (nick = '' AND LOWER(line) ~ '^%s '))
-                          ORDER BY tz_gmt DESC LIMIT 1;", $message->{channel}, $who, $who;
 
     # Execute the query and fetch the results to a handle
-    my $dbq = &dbquery($self, $sqlQuery);
+    my @sql_args = ($message->{channel}, $who);
+    
+    my $q = $self->_prepare($self);
+     
+    $q->execute(@sql_args);
     my ( $qday, $qtz );
-    $dbq->bind_columns( undef, \$qday, \$qtz );
+    $q->bind_columns( undef, \$qday, \$qtz );
 
     # Return through results
-    $dbq->fetch();
+    $q->fetch();
     
     my $text = "";
     if ($qday) {
@@ -57,33 +59,56 @@ sub told {
   }
 }
 
-sub dbquery {
+sub _prepare {
   my $self = shift;
-  my $q = shift;
 
-  my $dbh = $self->_get_dbh();
+  my $sqlQuery = "SELECT TO_CHAR(seen_date, 'DDth Mon YYYY') AS tz_date, TO_CHAR(seen_date, 'HH24:MI:SS tz') AS tz_time
+                    FROM irclog
+                   WHERE channel = ?
+                     AND (nick = ?)
+                ORDER BY seen_date DESC 
+                 LIMIT 1;";
 
-  my $db = $dbh->prepare($q);
-  $db->execute();
+  $logger->debug($sqlQuery);
 
-  return $db;
-}
+  my $q = $dbh->prepare($sqlQuery);
 
-sub _get_dbh {
-    my $conf = Config::File::read_config_file("database.conf");
-    my $dbs = $conf->{DSN} || "mysql";
-    my $db_name = $conf->{DATABASE} || "ilbot";
-    my $host = $conf->{HOST} || "localhost";
-    my $user = $conf->{USER} || "ilbot";
-    my $passwd = $conf->{PASSWORD} || "ilbot";
-
-    my $db_dsn = "DBI:$dbs:database=$db_name;host=$host";
-    my $dbh = DBI->connect($db_dsn, $user, $passwd,
-            {RaiseError=>1, AutoCommit => 1});
-
-    return $dbh;
+  return $q;
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+Bot::BasicBot::Pluggable::Module::DBSeen - determines when a given nick
+was seen the last time.
+
+=head1 SYNOPSIS
+
+
+=head1 IRC USAGE
+
+!seen <nick>
+
+=head1 AUTHOR
+
+Markus M. May, <triplem@tu.archserver.org>
+
+Based on the work done in Bot::BasicBot::Pluggable::Module::Seen.
+
+=head1 COPYRIGHT
+
+Copyright 2010, Markus M. May
+
+Distributed under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<Math::Units>
+L<Bot::BasicBot::Pluggable::Module::Seen>
+
+=cut 
 
 # vim: set ts=2 sw=2 et:

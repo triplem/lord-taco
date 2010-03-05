@@ -2,11 +2,10 @@ package Bot::BasicBot::Pluggable::Module::DBLog;
 
 use strict;
 use Bot::BasicBot::Pluggable::Module;
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 use base qw(Bot::BasicBot::Pluggable::Module);
-use Log::Log4perl qw(:easy);
-use DBI;
-use utf8;
-use Carp;
+
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh();
 
 sub help() {
    return "None, you can turn off logging for one line by applying [off] ";
@@ -33,7 +32,7 @@ sub seen {
 sub replied {
   my ( $self, $message, $reply ) = @_;
   
-#  $self->tell($message->{channel}, $message->{address});
+  return if $self->_filter_message($message);
 
   if ( $message->{address} and $message->{who} ) {
       $message->{address} = $message->{who};
@@ -42,13 +41,44 @@ sub replied {
   $message->{who}  = $self->bot->nick();
   $message->{body} = $reply;
   $self->seen($message);
+}
+
+sub chanjoin {
+  my ( $self, $message ) = @_;
   
+  
+  $self->_log( $message, 'JOIN: ' . $message->{who} );
+
   return;
+}
+
+sub chanpart {
+  my ( $self, $message ) = @_;
+  $self->_log( $message, 'PART: ' . $message->{who} );
+
+  return;
+}
+
+
+sub userquit {
+   
+}
+
+sub topic {
+   
+}
+
+sub kicked {
+   
+}
+
+sub nick_change {
+   
 }
 
 sub emoted {
   my ($self, $message, $prio) = @_;
-  
+    
   return if $self->_filter_message($message);
   return if $prio != 0;
   
@@ -76,36 +106,26 @@ sub _filter_message {
 sub _log {
   my ( $self, $channel, $who, $body ) = @_;
 
-  my @sql_args = ($channel, $self->_gmt_today(), $who, time, $body );
+  my @sql_args = ($channel, $self->_gmt_today(), $who, $body );
 
 #  $self->tell($channel, "Logging to DB ".$body);
 
-  my $dbh = $self->_get_dbh();
-  my $q = $dbh->prepare("INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)");
+  my $q = $self->_prepare();
 
   if ( $dbh->ping ) {
     $q->execute(@sql_args);
   } else {
-    $q = $dbh->prepare ("INSERT INTO irclog (channel, day, nick, timestamp, line) VALUES (?, ?, ?, ?, ?)");
+    $q = $self->_prepare();
     $q->execute(@sql_args);
   }
 
   return;  
 }
 
-sub _get_dbh {
-    my $conf = Config::File::read_config_file("database.conf");
-    my $dbs = $conf->{DSN} || "mysql";
-    my $db_name = $conf->{DATABASE} || "ilbot";
-    my $host = $conf->{HOST} || "localhost";
-    my $user = $conf->{USER} || "ilbot";
-    my $passwd = $conf->{PASSWORD} || "ilbot";
+sub _prepare {
+  my $q = $dbh->prepare("INSERT INTO irclog (channel, day, nick, line) VALUES (?, ?, ?, ?)");
 
-    my $db_dsn = "DBI:$dbs:database=$db_name;host=$host";
-    my $dbh = DBI->connect($db_dsn, $user, $passwd,
-            {RaiseError=>1, AutoCommit => 1});
-
-    return $dbh;
+  return $q;
 }
 
 sub _gmt_today {
@@ -114,5 +134,38 @@ sub _gmt_today {
 }
 
 1;
+
+
+__END__
+
+=head1 NAME
+
+Bot::BasicBot::Pluggable::Module::DBLog - logs statements ot the DB
+
+=head1 SYNOPSIS
+
+
+=head1 IRC USAGE
+
+    none
+
+=head1 AUTHOR
+
+Markus M. May, <triplem@tu.archserver.org>
+
+Based on the work done in Bot::BasicBot::Pluggable::Module::Log.
+
+=head1 COPYRIGHT
+
+Copyright 2010, Markus M. May
+
+Distributed under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<Math::Units>
+L<Bot::BasicBot::Pluggable::Module::Log>
+
+=cut 
 
 # vim: set ts=2 sw=2 et:

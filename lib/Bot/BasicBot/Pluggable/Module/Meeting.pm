@@ -27,8 +27,15 @@ sub init {
 }
 
 sub help {
-  return "Commands: startmeeting, endmeeting, startvote, endvote, topic";
+  return "Commands: #startmeeting, #endmeeting, #startvote, #endvote, #topic, #action";
 };
+
+## all variables are user_ variables, and can therefore be changed by admins
+## via the Bot::BasicBot::Pluggable::Module::Vars module
+my $meetingFlagPrefix = "user_meeting_flag_";
+my $meetingOperatorPrefix = "user_meeting_operator_";
+my $voteFlagPrefix = "user_vote_flag_";
+my $voteValuePrefix = "user_vote_value_";
 
 sub admin {
   my ( $self, $message ) = @_;
@@ -38,40 +45,43 @@ sub admin {
   
   my $channel = $message->{channel};
   
-  my $meetingFlag = "meeting_flag_".$channel;
-  my $meetingOperator = "meeting_operator_".$channel;
+  my $meetingFlag = $meetingFlagPrefix.$channel;
+  my $meetingOperator = $meetingOperatorPrefix.$channel;
    
   my ( $command, $param ) = split (/\s+/, $body, 2);
   $command = lc($command);
   $logger->debug("command: ".$command);
  
   # turn the meeting for this channel on/off 
-  if ( $command eq "startmeeting" ) {
+  if ( $command eq "#startmeeting" ) {
+    if ( $self->get($meetingFlag) eq 'true' ) {
+      $self->reply($message, "meeting is already running ;-)");   
+    } 
     $self->set($meetingFlag, 'true');
     $self->set($meetingOperator, $message->{who});
-    $self->tell($channel, "meeting mode is turned on");
-  } elsif ( $command eq "endmeeting" ) {
-    if ($self->get($meetingOperator) eq $message->{who}) {
-      if ($self->get($meetingFlag) eq 'true') {
+    $self->reply($message, "meeting mode is turned on");
+  } elsif ( $command eq "#endmeeting" ) {
+    if ($self->get($meetingFlag) eq 'true') {
+      if ($self->get($meetingOperator) eq $message->{who}) {
         $self->unset($meetingFlag);
-        $self->tell($channel, "meeting mode is turned off");
-      } else {
-        $self->tell($channel, "no meeting running currently");
+        $self->reply($message, "meeting mode is turned off");
       }
+    } else {
+      $self->reply($message, "no meeting running currently");
     }
   }
 
   return 0 unless $self->get($meetingFlag) eq 'true';
   return 0 unless $message->{who} eq $self->get($meetingOperator);
   
-  my $voteFlag = "meeting_vote_".$channel;
-  my $voteValue = "meeting_vote_value_".$channel;
+  my $voteFlag = $voteFlagPrefix.$channel;
+  my $voteValue = $voteValuePrefix.$channel;
 
-  if ( $command eq "startvote") {
+  if ( $command eq "#startvote") {
     $self->set($voteFlag, 'true');
     $self->set($voteValue, 0);
-    $self->tell($channel, "vote is turned on");
-  } elsif ( $command eq "endvote" ) {
+    $self->reply($message, "vote is turned on");
+  } elsif ( $command eq "#endvote" ) {
     my $voteEnabled = $self->get($voteFlag);
     
     if ($voteEnabled eq "true") {
@@ -79,13 +89,17 @@ sub admin {
       $self->unset($voteFlag);
       $self->unset($voteValue);
       $logger->debug("voteoff succeded with result $result");
-      $self->tell($channel, "vote is turned off, result is: ".$result);            
+      $self->reply($message, "vote is turned off, result is: ".$result);            
     } else {   
-      $self->tell($channel, "no vote running in this channel");
+      $self->reply($message, "no vote running in this channel");
     }
-  } elsif ($body =~ /^!topic[ ](.+)$/) {
-    $self->tell($channel, "Current Topic: ".$1);     
+  } elsif ($body =~ /^#topic[ ](.+)$/) {
+    $self->reply($message, "Current Topic: ".$1);     
+  } elsif ($body =~ /^#action[ ](.+)$/) {
+    $self->reply($message, "New Action: ".$1);     
   }
+  
+  return;
 }
 
 ## This method is called for every seen message
@@ -96,12 +110,12 @@ sub seen {
   return 0 unless defined $body;
 
   my $channel = $message->{channel};
-  my $meetingFlag = "meeting_flag_".$channel;
-  my $voteValue = "meeting_vote_value_".$channel;
+  my $meetingFlag = $meetingFlagPrefix.$channel;
+  my $voteValue = $voteValuePrefix.$channel;
   
   return 0 unless $self->get($meetingFlag) eq 'true';
 
-  if ($self->get("meeting_vote_".$channel) eq 'true') {
+  if ($self->get($voteFlagPrefix.$channel) eq 'true') {
     if ( $body eq '+1' ) {
       my $counter = $self->get($voteValue);       
       $counter++;
@@ -115,5 +129,31 @@ sub seen {
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+
+=head1 SYNOPSIS
+
+
+=head1 IRC USAGE
+
+
+=head1 AUTHOR
+
+Markus M. May, <triplem@tu.archserver.org>
+
+=head1 COPYRIGHT
+
+Copyright 2010, Markus M. May
+
+Distributed under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+
+=cut 
 
 # vim: set ts=2 sw=2 et:
