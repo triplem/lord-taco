@@ -1,12 +1,9 @@
 package Bot::BasicBot::Pluggable::Module::DBAccess;
 
 use strict;
-use Log::Log4perl qw(:easy);
 use DBI;
 use utf8;
 use Carp;
-
-
 
 sub get_dbh {
     my $conf = Config::File::read_config_file("database.conf");

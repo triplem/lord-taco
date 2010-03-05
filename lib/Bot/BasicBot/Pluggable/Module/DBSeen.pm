@@ -4,12 +4,8 @@ use strict;
 use Bot::BasicBot::Pluggable::Module;
 use base qw(Bot::BasicBot::Pluggable::Module);
 use Bot::BasicBot::Pluggable::Module::DBAccess;
-use Log::Log4perl qw(:easy);
 
 my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh();
-
-Log::Log4perl->easy_init($DEBUG);
-my $logger = get_logger();
 
 sub help() {
   return "Commands: 'seen <nick>'";
@@ -68,8 +64,6 @@ sub _prepare {
                      AND (nick = ?)
                 ORDER BY seen_date DESC 
                  LIMIT 1;";
-
-  $logger->debug($sqlQuery);
 
   my $q = $dbh->prepare($sqlQuery);
 

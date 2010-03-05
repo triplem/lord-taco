@@ -3,11 +3,6 @@ package Bot::BasicBot::Pluggable::Module::Meeting;
 use strict;
 use Bot::BasicBot::Pluggable::Module;
 use base qw(Bot::BasicBot::Pluggable::Module);
-use Log::Log4perl qw(:easy);
-
-#enable logging
-  Log::Log4perl->easy_init($DEBUG);
-  my $logger = get_logger();
 
 sub init {
   my $self = shift;
@@ -45,12 +40,14 @@ sub admin {
   
   my $channel = $message->{channel};
   
+  return 0 unless $self->authed($message->{who}) eq '1';
+  
+  
   my $meetingFlag = $meetingFlagPrefix.$channel;
   my $meetingOperator = $meetingOperatorPrefix.$channel;
    
   my ( $command, $param ) = split (/\s+/, $body, 2);
   $command = lc($command);
-  $logger->debug("command: ".$command);
  
   # turn the meeting for this channel on/off 
   if ( $command eq "#startmeeting" ) {
@@ -88,7 +85,6 @@ sub admin {
       my $result = $self->get($voteValue);
       $self->unset($voteFlag);
       $self->unset($voteValue);
-      $logger->debug("voteoff succeded with result $result");
       $self->reply($message, "vote is turned off, result is: ".$result);            
     } else {   
       $self->reply($message, "no vote running in this channel");
