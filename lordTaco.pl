@@ -56,7 +56,8 @@ my $title_module = $bot->load('Title');
 my $dbseen_module = $bot->load('DBSeen'); 
 my $dblog_module = $bot->load('DBLog');
 my $var_module = $bot->load('Vars');
-my $variable_module = $bot->load('Variables');
+# This is just for debugging purposes
+#my $variable_module = $bot->load('Variables');
 
 
 $bot->run();
