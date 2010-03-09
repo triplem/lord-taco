@@ -6,25 +6,25 @@ use base qw(Bot::BasicBot::Pluggable::Module);
 
 sub init {
   my $self = shift;
-
-  my $resetOnStartup = $self->get("reset_on_startup");
+  $self->config(
+    { 
+      reset_on_startup => 1, 
+    }
+  );
   
-  if ($resetOnStartup == 1) {
-    print $resetOnStartup." set to 1"; 
-     
+  if ($self->get("reset_on_startup")  == 1) {
     my $store = $self->store();
     my $namespace = "Meeting";
   
     # cleaning all set variables on a reload, this is 
     # unfortunate during a meeting, but otherwise
     # it could not be handled correctly.
-    for ($store->keys($namespace)) {
-      my $value = $store->get($namespace, $_);
-      $self->unset($_);
+    for ($store->keys($namespace)) {      
+        $self->unset($_);
     }
+    # clean the stuff up again ;-)
+    $self->set("reset_on_startup", 1);    
   }
-   
-  return;   
 }
 
 sub help {

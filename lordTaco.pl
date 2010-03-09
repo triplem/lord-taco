@@ -5,8 +5,13 @@ use strict;
 use Config::File;
 use Bot::BasicBot::Pluggable;
 use Bot::BasicBot::Pluggable::Store::DBI;
+use Log::Log4perl qw(:easy);
+
 
 package main;
+
+Log::Log4perl->easy_init($DEBUG);
+my $logger = get_logger();
 
 # configuration for the datastore
 my $dbconf = Config::File::read_config_file( shift @ARGV || "database.conf" );
@@ -31,6 +36,8 @@ my $port   = $conf->{PORT}   || 6667;
 my $channels = [ split m/\s+/, $conf->{CHANNEL} ];
 my $password      = $conf->{PASSWORD}       || "";
 
+$logger->debug($conf->{CHANNEL});
+
 my $bot = Bot::BasicBot::Pluggable->new(
   server        => $server,
   port          => $port,
@@ -48,8 +55,6 @@ my $bot = Bot::BasicBot::Pluggable->new(
 my $auth_module = $bot->load('Auth');
 my $join_module = $bot->load('Join');
 my $meeting_module = $bot->load('Meeting');
-#$meeting_module->set("reset_on_startup", 0);
-
 my $infobot_module = $bot->load('Infobot');
 my $insult_module = $bot->load('ASInsult');
 my $title_module = $bot->load('Title');
@@ -57,8 +62,7 @@ my $dbseen_module = $bot->load('DBSeen');
 my $dblog_module = $bot->load('DBLog');
 my $var_module = $bot->load('Vars');
 # This is just for debugging purposes
-#my $variable_module = $bot->load('Variables');
-
+my $variable_module = $bot->load('Variables');
 
 $bot->run();
 
