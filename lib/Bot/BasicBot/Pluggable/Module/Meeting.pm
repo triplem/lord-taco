@@ -96,8 +96,12 @@ sub admin {
       $self->reply($message, "no vote running in this channel");
     }
   } elsif ($body =~ /^#topic[ ](.+)$/) {
-    $self->reply($message, "Current Topic: ".$1);     
+    $self->reply($message, "Current Topic: ".$1);
+## if we are in a meeting channel (determine by configuration)
+## then we can also change the topic of the channel         
   } elsif ($body =~ /^#action[ ](.+)$/) {
+## TODO we need to split this one correctly to capture also 
+## who and also the what correctly     
     $self->reply($message, "New Action: ".$1);     
   }
   
