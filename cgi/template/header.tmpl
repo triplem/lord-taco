@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+ <head>
+  <title>ArchServer :: IRC logs</title>
+  <link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=BASE_URL>style.css" />
+  <link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=BASE_URL>ArchServer.css" />
+  <meta name="description" content="IRC logs by ilbot" />
+  <TMPL_IF NAME=ADMIN>
+   <script type="text/javascript">
+    <!--
+	function reset_checkboxes() {
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 1; i < inputs.length - 1; i++){
+			inputs[i].checked = false;
+		}
+	}
+     //-->
+    </script>
+   </TMPL_IF>
+   <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.min.js"></script>
+   <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.autocomplete.js"></script>	
+ </head>
+ <body>
+<!-- Header and Navigation Bar -->
+<div id="head_container">
+ <div id="title">
+
+  <div id="logo"><h1 id="archtitle"><a href="/" title="ArchServer (Home)">ArchServer</a></h1></div>
+ </div>
+
+ <div id="main_nav">
+  <ul>
+   <li><a href="http://repo.archserver.org">Repo</a></li>
+   <li><a href="http://wiki.archserver.org">Wiki</a></li>
+   <li><a href="http://bugs.archserver.org">Bugs</a></li>
+
+   <li><a href="http://docs.archserver.org">Documentation</a></li>
+   <li><a href="http://bbs.archserver.org">Forums</a></li>
+   <li><a href="http://www.archserver.org">Home</a></li>
+  </ul>
+ </div>
+</div>
+
+<!-- Main Content -->
+<div id="content">
+
+ <div id="dev_nav">
+  <ul>
+   <li><a href="<TMPL_VAR NAME=BASE_URL>archserver/today">#ArchServer Today</a></li>
+   <li><a href="<TMPL_VAR NAME=BASE_URL>search.pl">Search</a></li>
+   <li><a href="<TMPL_VAR NAME=BASE_URL>">IRC Logs</a></li>
+  </ul>
+ </div>
+

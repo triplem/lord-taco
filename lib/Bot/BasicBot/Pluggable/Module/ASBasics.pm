@@ -14,7 +14,8 @@ sub init {
     { 
       user_wiki_url => "http://wiki.archserver.org/search/%s",
       user_bugs_search_url => "http://bugs.archserver.org/search/%s",
-      user_bugs_url => "http://bugs.archserver.org/task/%s", 
+      user_bugs_url => "http://bugs.archserver.org/task/%s",
+      user_bbs_url => "http://bbs.archserver.org/viewtopic.php?pid=%s", 
     }
   );
 }
@@ -51,9 +52,11 @@ sub seen {
     $return = $self->get("user_bugs_url");
   } elsif ( $command eq '#bugsearch' ) {
     $return = $self->get("user_bugs_search_url");     
+  } elsif ( $command eq '#bbspost' ) {
+    $return = $self->get("user_bbs_url");
   }
   
-  $self->reply($message, sprintf( $return, $text ));
+  $self->reply($message, sprintf( $return, $concat ));
 }
 
 1;

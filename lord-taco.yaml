@@ -1,0 +1,31 @@
+server:   irc.freenode.net
+port:     6667
+nick:     RenewedLordTaco
+password: test
+username: LordTaco
+name:     AS IRC Bot, based on Bot::BasicBot::Pluggable
+charset:  utf-8
+alt_nicks:
+  - DemoLordTaco
+  - RenewedLordTacoI
+store:
+  type:     Bot::BasicBot::Pluggable::Store::DBI
+  dsn:      DBI:Pg:database=ilbot;host=localhost
+  user:     ilbot
+  password: ilbot
+  table:    bot_store
+modules:
+  - module: Auth
+  - module: Join
+  - module: Meeting
+  - module: Infobot
+  - module: Title
+  - module: ASInsult
+  - module: DBSeen
+  - module: DBLog
+  - module: Vars
+  - module: Variables
+  - module: ASBasics
+  - module: BotBasics
+channels:
+  - #pluggablebot

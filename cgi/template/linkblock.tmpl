@@ -1,0 +1,10 @@
+<p>
+<TMPL_IF NAME=PREV_URL><a href="<TMPL_VAR NAME=PREV_URL>">&lt; Previous day</a> |</TMPL_IF> 
+<a href="<TMPL_VAR NAME=BASE_URL>">Index</a> |
+<TMPL_IF NAME=NEXT_URL><a href="<TMPL_VAR NAME=NEXT_URL>">Next day &gt;</a> |</TMPL_IF>
+<a href="<TMPL_VAR NAME=BASE_URL><TMPL_VAR NAME=CHANNEL>/today">Today</a> |
+
+<a href="<TMPL_VAR NAME=BASE_URL><TMPL_VAR NAME=CHANNEL>">Channel Index</a> |
+<a href="<TMPL_VAR BASE_URL>search.pl?channel=<TMPL_VAR CHANNEL>">Search</a>
+<TMPL_IF NAME=DATE>| <a href="<TMPL_VAR	NAME=BASE_URL>text.pl?channel=<TMPL_VAR NAME=CHANNEL>;date=<TMPL_VAR NAME=DATE>">Plain-Text</a></TMPL_IF>
+</p>

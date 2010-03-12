@@ -8,12 +8,17 @@ sub help {
   return "Commands: #age, #version, #source, #logs";
 };
 
+sub connected {
+  my $self = shift;
+  $self->set("bot_start_time", time);     
+}
+
 sub init {
   my $self = shift;
   $self->config(
     { 
-      user_version => "I am v0.0.99",
-      user_source_url => "http://bugs.archserver.org/search/%s",
+      version => "I am v0.0.99",
+      source_url => "http://git.archserver.org/?p=ilbot.git;a=summary",
       user_logs_url => "http://irclogs.archserver.org/%s",
     }
   );
@@ -31,31 +36,20 @@ sub seen {
   my ( $command, $param ) = split (/\s+/, $body, 2);
   $command = lc($command);  
 
-  if ($command eq '#age' or $command eq '#version') {
-     return $self->get("user_version");
-  } elsif ($command eq '#source') {
-     return $self->get("user_source_url");
-  }
-
-  #### if there are keywords, attach them
-  my $concat;
-  if ($param) {
-    my @wordArray = split( ' ', $param );
-    foreach my $word (@wordArray) {
-      if ($concat) {
-        $concat = $concat . "+" . $word;
-      } else {
-        $concat = $word;
-      }
-    }
-  }  
-  
   my $return = "";
-  if ( $command eq '#logs' ) {
-    $return = $self->get("user_logs_url");
+  if ($command eq '#age') {
+    my $startTime = $self->get("bot_start_time");
+    my $age = parseInterval( seconds => ( time - $startTime ), String => 1 );
+    $return = "I've been alive for $age";
+  } elsif ($command eq '#version') {
+    $return = $self->get("version");
+  } elsif ($command eq '#source') {
+    $return = $self->get("source_url");
+  } elsif ( $command eq '#logs' ) {
+    $return = $self->get("user_logs_url").$message->{channel};
   } 
   
-  return sprintf( $return, $text );
+  return $return;
 }
 
 1;

@@ -4,9 +4,9 @@ use warnings;
 use strict;
 use Config::File;
 use Bot::BasicBot::Pluggable;
+#use Bot::BasicBot::Pluggable::WithConfig;
 use Bot::BasicBot::Pluggable::Store::DBI;
 use Log::Log4perl qw(:easy);
-
 
 package main;
 
@@ -53,6 +53,7 @@ my $bot = Bot::BasicBot::Pluggable->new(
 
 # load needed modules
 my $auth_module = $bot->load('Auth');
+my $basic_module = $bot->load('BotBasics');
 my $join_module = $bot->load('Join');
 my $meeting_module = $bot->load('Meeting');
 my $infobot_module = $bot->load('Infobot');
@@ -63,6 +64,11 @@ my $dblog_module = $bot->load('DBLog');
 my $var_module = $bot->load('Vars');
 # This is just for debugging purposes
 my $variable_module = $bot->load('Variables');
+
+#my $bot = Bot::BasicBot::Pluggable->new_with_config(
+#  config => 'lord-taco.yaml'
+#);
+
 
 $bot->run();
 

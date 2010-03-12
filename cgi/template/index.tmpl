@@ -1,0 +1,27 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<div id='about' class='box'>
+<p>These are the archives of the ArchServer IRC channels. All discussions are logged and made available here for historic purposes.</p>
+
+<p>You can join the us for a chat on the <a href='http://freenode.net/'>Freenode</a> network in the channel <a href='irc://chat.freenode.net/#ArchServer'>#ArchServer</a></p>
+
+<p>
+If you are pariticpating in the channel and do not wish your message to be recorded, please prefix your message with the keyword:<br />
+<pre>    [off]</pre>
+This will prevent the bot from logging your message.
+</p>
+</div>
+
+<h2>Channels</h2>
+ <ul>
+  <TMPL_LOOP NAME=CHANNELS>
+  <li><a href="<TMPL_VAR NAME=BASE_URL><TMPL_VAR NAME=CHANNEL ESCAPE=URL>/">#<TMPL_VAR NAME=CHANNEL></a> - <a href="<TMPL_VAR NAME=BASE_URL><TMPL_VAR NAME=CHANNEL ESCAPE=URL>/today">Today</a></li>
+  </TMPL_LOOP>
+ </ul>
+</div>
+
+<TMPL_INCLUDE NAME="footer.tmpl">
+
+</body>
+
+</html>
