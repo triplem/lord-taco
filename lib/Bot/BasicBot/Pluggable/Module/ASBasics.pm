@@ -44,7 +44,7 @@ sub seen {
       }
     }
   }  
-  
+
   my $return = "";
   if ( $command eq '#wiki' ) {
     $return = $self->get("user_wiki_url");
@@ -55,10 +55,18 @@ sub seen {
   } elsif ( $command eq '#bbspost' ) {
     $return = $self->get("user_bbs_url");
   } elsif ( $command eq '#slap' ) {
-    $return = "slaps %s around with a trout...";
+    $self->emote($message, sprintf("slaps %s around with a trout...",  $concat));
   }
   
   $self->reply($message, sprintf( $return, $concat ));
+}
+
+sub emote {
+  my $self = shift;
+  my $message = shift;
+  my $body = shift;
+  
+  return $self->bot->emote({channel => $message->{channel}, body => $body});
 }
 
 1;
