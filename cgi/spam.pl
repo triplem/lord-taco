@@ -12,13 +12,14 @@ use HTML::Template;
 use lib 'lib';
 use IrcLog qw(get_dbh);
 use IrcLog::WWW 'http_header';
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 
 my $q = CGI->new();
 
 my @range =  sort $q->param("range");
 my @single =  $q->param("single");
 
-my $dbh = get_dbh();
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("/srv/ilbot/database.conf");
 
 my $range_count = scalar @range;
 

@@ -5,7 +5,7 @@ use Bot::BasicBot::Pluggable::Module;
 use Bot::BasicBot::Pluggable::Module::DBAccess;
 use base qw(Bot::BasicBot::Pluggable::Module);
 
-my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh();
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("database.conf");
 
 sub help() {
    return "None, you can turn off logging for one line by applying [off] ";
@@ -108,7 +108,8 @@ sub _log {
 
   my @sql_args = ($channel, $self->_gmt_today(), $who, $body );
 
-#  $self->tell($channel, "Logging to DB ".$body);
+  #$self->tell($channel, "Logging to DB ".$body);
+  #$self->tell($channel, "Logging to DB with channel".$channel);
 
   my $q = $self->_prepare();
 

@@ -54,6 +54,8 @@ sub seen {
     $return = $self->get("user_bugs_search_url");     
   } elsif ( $command eq '#bbspost' ) {
     $return = $self->get("user_bbs_url");
+  } elsif ( $command eq '#slap' ) {
+    $return = "slaps %s around with a trout...";
   }
   
   $self->reply($message, sprintf( $return, $concat ));

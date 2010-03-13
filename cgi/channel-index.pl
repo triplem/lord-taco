@@ -10,6 +10,7 @@ use HTML::Template;
 use Cache::FileCache;
 use lib 'lib';
 use IrcLog qw(get_dbh gmt_today);
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 
 # test_calendar();
 go();
@@ -52,7 +53,7 @@ sub get_channel_index {
 
     # we are evil and create a calendar entry for month between the first
     # and last date
-    my $dbh       = get_dbh();
+    my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("/srv/ilbot/database.conf");
     my $get_dates = 'SELECT DISTINCT day FROM irclog WHERE channel = ? ORDER BY day';
     my $dates     = $dbh->selectcol_arrayref($get_dates, undef, '#' . $channel);
 

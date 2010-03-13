@@ -7,8 +7,9 @@ use Carp;
 
 sub get_dbh {
   my $self = shift;
+  my $configFile = shift;
   
-  my $conf = Config::File::read_config_file("database.conf");
+  my $conf = Config::File::read_config_file($configFile);
   my $dbs = $conf->{DSN} || "Pg";
   my $db_name = $conf->{DATABASE} || "ilbot";
   my $host = $conf->{HOST} || "localhost";

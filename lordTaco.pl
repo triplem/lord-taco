@@ -6,6 +6,7 @@ use Config::File;
 use Bot::BasicBot::Pluggable;
 #use Bot::BasicBot::Pluggable::WithConfig;
 use Bot::BasicBot::Pluggable::Store::DBI;
+use Bot::BasicBot::Pluggable::Store::Deep;
 use Log::Log4perl qw(:easy);
 
 package main;
@@ -53,10 +54,10 @@ my $bot = Bot::BasicBot::Pluggable->new(
 
 # load needed modules
 my $auth_module = $bot->load('Auth');
-my $basic_module = $bot->load('BotBasics');
+my $botbasic_module = $bot->load('BotBasics');
+my $asbasic_module = $bot->load('ASBasics');
 my $join_module = $bot->load('Join');
 my $meeting_module = $bot->load('Meeting');
-my $infobot_module = $bot->load('Infobot');
 my $insult_module = $bot->load('ASInsult');
 my $title_module = $bot->load('Title');
 my $dbseen_module = $bot->load('DBSeen'); 

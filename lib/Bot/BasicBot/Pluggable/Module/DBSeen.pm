@@ -5,7 +5,7 @@ use Bot::BasicBot::Pluggable::Module;
 use base qw(Bot::BasicBot::Pluggable::Module);
 use Bot::BasicBot::Pluggable::Module::DBAccess;
 
-my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh();
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("database.conf");
 
 sub help() {
   return "Commands: 'seen <nick>'";

@@ -13,13 +13,14 @@ use lib 'lib';
 use IrcLog qw(get_dbh gmt_today);
 use IrcLog::WWW qw(my_encode my_decode);
 use Text::Table;
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 
 my $default_channel = 'ArchServer';
 
 # End of config
 
 my $q = new CGI;
-my $dbh = get_dbh();
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("/srv/ilbot/database.conf");
 my $channel = $q->param('channel') || $default_channel;
 
 my $date = $q->param('date') || gmt_today;

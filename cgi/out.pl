@@ -16,7 +16,7 @@ use IrcLog qw(get_dbh gmt_today);
 use IrcLog::WWW qw(http_header message_line my_encode);
 use Cache::SizeAwareFileCache;
 #use Data::Dumper;
-
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 
 # Configuration
 # $base_url is the absoulte URL to the directoy where index.pl and out.pl live
@@ -55,7 +55,7 @@ my $default_channel = 'ArchServer';
 # End of config
 
 my $q = new CGI;
-my $dbh = get_dbh();
+my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("/srv/ilbot/database.conf");
 my $channel = $q->param('channel') || $default_channel;
 my $date = $q->param('date') || gmt_today();
 if ($date eq 'today') {

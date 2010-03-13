@@ -8,6 +8,7 @@ use HTML::Template;
 use lib 'lib';
 use IrcLog qw(get_dbh);
 use IrcLog::WWW qw(http_header);
+use Bot::BasicBot::Pluggable::Module::DBAccess;
 
 use Cache::FileCache;
 
@@ -26,7 +27,8 @@ print $data;
 
 sub get_index {
 
-	my $dbh = get_dbh();
+#	my $dbh = get_dbh();
+   my $dbh = Bot::BasicBot::Pluggable::Module::DBAccess->get_dbh("/srv/ilbot/database.conf");
 
 	my $conf = Config::File::read_config_file('cgi.conf');
 	my $base_url = $conf->{BASE_URL} || q{/irclog/};
