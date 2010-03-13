@@ -5,7 +5,7 @@ use Bot::BasicBot::Pluggable::Module;
 use base qw(Bot::BasicBot::Pluggable::Module);
 
 sub help {
-  return "Commands: #bugs, #wiki";
+  return "Commands: #bugs, #bugsearch, #wiki, #bbspost, #search, #slap";
 };
 
 sub init {
@@ -15,7 +15,8 @@ sub init {
       user_wiki_url => "http://wiki.archserver.org/search/%s",
       user_bugs_search_url => "http://bugs.archserver.org/search/%s",
       user_bugs_url => "http://bugs.archserver.org/task/%s",
-      user_bbs_url => "http://bbs.archserver.org/viewtopic.php?pid=%s", 
+      user_bbs_url => "http://bbs.archserver.org/viewtopic.php?pid=%s",
+      user_search_url => "http://lmgtfy.com/?q=%s",
     }
   );
 }
@@ -54,10 +55,14 @@ sub seen {
     $return = $self->get("user_bugs_search_url");     
   } elsif ( $command eq '#bbspost' ) {
     $return = $self->get("user_bbs_url");
+  } elsif ( $command eq '#search') {
+    $return = $self->get("user_search_url"); 
   } elsif ( $command eq '#slap' ) {
     $self->emote($message, sprintf("slaps %s around with a trout...",  $concat));
-  }
-  
+  } 
+
+  return 0 unless (!$return eq "");
+    
   $self->reply($message, sprintf( $return, $concat ));
 }
 
@@ -66,7 +71,7 @@ sub emote {
   my $message = shift;
   my $body = shift;
   
-  return $self->bot->emote({channel => $message->{channel}, body => $body});
+  return $self->bot->emote({who => '*', channel => $message->{channel}, body => $body});
 }
 
 1;

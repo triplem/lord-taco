@@ -1,4 +1,4 @@
-ackage Bot::BasicBot::Pluggable::Module::ASTitle;
+package Bot::BasicBot::Pluggable::Module::ASTitle;
 use base qw(Bot::BasicBot::Pluggable::Module);
 use warnings;
 use strict;
@@ -18,7 +18,7 @@ sub admin {
 
   my $reply = "";
   for ( list_uris( $mess->{body} ) ) {
-    next if $ignore_regexp && /$ignore_regexp/;
+#    next if $ignore_regexp && /$ignore_regexp/;
     my $uri = URI->new($_);
     next unless $uri;
     if ( $uri->scheme eq "file" ) {

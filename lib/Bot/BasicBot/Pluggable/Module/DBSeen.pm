@@ -23,7 +23,7 @@ sub told {
     my $who  = lc($1);
 
     if ($who eq $self->{who}) {
-      $self->tell($self->{channel}, "You can't find yourself? I don't think I can help with that...");
+      $self->reply($self->{channel}, "You can't find yourself? I don't think I can help with that...");
     }
 
     # Find the user in the dbms
@@ -49,7 +49,7 @@ sub told {
       $text = sprintf "Sorry, I don't remember seeing %s :(", $who;
     }
 
-    $self->tell($message->{channel}, $text);
+    $self->reply($message->{channel}, $text);
 
     return;
   }

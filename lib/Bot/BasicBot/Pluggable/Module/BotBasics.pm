@@ -48,8 +48,10 @@ sub seen {
   } elsif ( $command eq '#logs' ) {
     $return = $self->get("user_logs_url").$message->{channel};
   } 
+ 
+  return 0 unless (!$return eq "");
   
-  return $return;
+  $self->reply($message, $return);
 }
 
 1;

@@ -5,16 +5,18 @@ use Bot::BasicBot::Pluggable::Module;
 use Acme::Scurvy::Whoreson::BilgeRat;
 use base qw(Bot::BasicBot::Pluggable::Module);
 
-sub said { 
-    my ($self, $mess, $pri) = @_;
+sub seen { 
+    my ($self, $mess) = @_;
 
     my $body = $mess->{body}; 
+
+    return 0 unless defined $body;
+    
     my $who  = $mess->{who};
 
-    return unless ($pri == 2);
-    return unless $body =~ /^insult (.*)\s*$/;
+    return 0 unless $body =~ /^insult (.*)\s*$/;
 
-    my $person   = $1;
+    my $person = $1;
     
     $person = $who if $person =~ /^\s*me\s*$/i;
 
@@ -22,12 +24,12 @@ sub said {
 
     my $insult = "$insultgenerator";    
 
-    return "Errk, the insult code is mysteriously not working" unless defined $insult;
+    $self->reply($mess, "Errk, the insult code is mysteriously not working") unless defined $insult;
 
 #    $insult =~ s/^\s*You are/$person is/i if ($person ne $who);  
     $insult = $person.": ".$insult;
 
-    return $insult;
+    $self->reply($mess, $insult);
 }
 
 sub help {
