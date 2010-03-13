@@ -11,8 +11,8 @@ use Log::Log4perl qw(:easy);
 
 package main;
 
-Log::Log4perl->easy_init($DEBUG);
-my $logger = get_logger();
+#Log::Log4perl->easy_init($DEBUG);
+#my $logger = get_logger();
 
 # configuration for the datastore
 my $dbconf = Config::File::read_config_file( shift @ARGV || "database.conf" );
@@ -37,7 +37,7 @@ my $port   = $conf->{PORT}   || 6667;
 my $channels = [ split m/\s+/, $conf->{CHANNEL} ];
 my $password      = $conf->{PASSWORD}       || "";
 
-$logger->debug($conf->{CHANNEL});
+#$logger->debug($conf->{CHANNEL});
 
 my $bot = Bot::BasicBot::Pluggable->new(
   server        => $server,
@@ -64,7 +64,7 @@ my $dbseen_module = $bot->load('DBSeen');
 my $dblog_module = $bot->load('DBLog');
 my $var_module = $bot->load('Vars');
 # This is just for debugging purposes
-my $variable_module = $bot->load('Variables');
+#my $variable_module = $bot->load('Variables');
 
 #my $bot = Bot::BasicBot::Pluggable->new_with_config(
 #  config => 'lord-taco.yaml'
