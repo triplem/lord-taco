@@ -5,6 +5,13 @@ use DBI;
 use utf8;
 use Carp;
 
+sub get_config {
+   my $self = shift;
+   my $configFile = shift;
+   
+   
+}
+
 sub get_dbh {
   my $self = shift;
   my $configFile = shift;

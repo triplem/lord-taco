@@ -56,6 +56,7 @@ my $bot = Bot::BasicBot::Pluggable->new(
 my $auth_module = $bot->load('Auth');
 my $botbasic_module = $bot->load('BotBasics');
 my $asbasic_module = $bot->load('ASBasics');
+my $asinfobot_module = $bot->load('ASInfobot');
 my $join_module = $bot->load('Join');
 my $meeting_module = $bot->load('Meeting');
 my $insult_module = $bot->load('ASInsult');
