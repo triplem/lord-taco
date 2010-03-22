@@ -116,7 +116,7 @@ sub irclog_output {
             );
 
     $t->param(ADMIN => 1) if ($q->param('admin'));
-    $t->param(IPHONE => 1) if ($q->user_agent() == 'iphone');
+    $t->param(IPHONE => 1) if ($q->user_agent() =~ 'm/iPhone/');
 
     {
         my $clf = "channels/$channel.tmpl";
