@@ -16,8 +16,10 @@
      //-->
     </script>
    </TMPL_IF>
-   <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.min.js"></script>
-   <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.autocomplete.js"></script>	
+   <TMPL_UNLESS NAME=IPHONE>
+     <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.min.js"></script>
+     <script type="text/javascript" src="<TMPL_VAR NAME=BASE_URL>jquery.autocomplete.js"></script>	
+   </TMPL_UNLESS>
  </head>
  <body>
 <!-- Header and Navigation Bar -->
