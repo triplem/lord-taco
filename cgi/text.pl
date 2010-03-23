@@ -29,7 +29,7 @@ if ($channel !~ m/^\w+(?:-\w+)*\z/sx){
     # guard against channel=../../../etc/passwd or so
     confess 'Invalid channel name';
 }
-my $db = $dbh->prepare('SELECT nick, timestamp, line FROM irclog '
+my $db = $dbh->prepare('SELECT nick, seen_date, line FROM irclog '
         . 'WHERE day = ? AND channel = ? AND NOT spam ORDER BY id');
 $db->execute($date, '#' . $channel);
 

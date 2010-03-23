@@ -93,7 +93,7 @@ if (length($nick) or length($qs)){
 	my $q0 = $dbh->prepare("SELECT COUNT(DISTINCT day) FROM irclog $sql_cond");
 	my $q1 = $dbh->prepare(sprintf('SELECT DISTINCT day FROM irclog %s ORDER BY day DESC LIMIT %d OFFSET %d', $sql_cond, $days_per_page, $offset));
 	my $q2 = $dbh->prepare(sprintf('SELECT id, day FROM irclog %s AND day = ? ORDER BY id', $sql_cond));
-	my $q3 = $dbh->prepare('SELECT id, timestamp, nick, line FROM irclog WHERE day = ? AND id >= ? AND id <= ? ORDER BY id ASC');
+	my $q3 = $dbh->prepare('SELECT id, seen_date, nick, line FROM irclog WHERE day = ? AND id >= ? AND id <= ? ORDER BY id ASC');
 
 	# Execute our SQL Queries
 	$q0->execute(@args);

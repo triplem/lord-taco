@@ -126,7 +126,7 @@ sub irclog_output {
     }
     $t->param(BASE_URL  => $base_url);
     my $self_url = $base_url . "/$channel/$date";
-    my $db = $dbh->prepare('SELECT id, nick, timestamp, line FROM irclog '
+    my $db = $dbh->prepare('SELECT id, nick, seen_date, line FROM irclog '
             . 'WHERE day = ? AND channel = ? AND NOT spam ORDER BY id');
     $db->execute($date, $full_channel);
 
